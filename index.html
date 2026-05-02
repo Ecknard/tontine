@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tontine 2025</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0a0a0c;
+  --s1:        #111115;
+  --s2:        #18181e;
+  --s3:        #202028;
+  --border:    rgba(255,255,255,0.06);
+  --border-md: rgba(255,255,255,0.11);
+  --text:      #edeae3;
+  --muted:     rgba(237,234,227,0.40);
+  --faint:     rgba(237,234,227,0.15);
+  --gold:      #c9a84c;
+  --gold-l:    #e8c96a;
+  --gold-bg:   rgba(201,168,76,0.10);
+  --green:     #3ecf8e;
+  --green-bg:  rgba(62,207,142,0.09);
+  --amber:     #f5a623;
+  --amber-bg:  rgba(245,166,35,0.10);
+  --r:         16px;
+  --r-sm:      10px;
+  --r-xs:      7px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Figtree', sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 0;
+}
+.blob-1 { width: 320px; height: 320px; background: rgba(201,168,76,0.18); top: -100px; right: -80px; }
+.blob-2 { width: 240px; height: 240px; background: rgba(62,207,142,0.12); bottom: 80px; left: -80px; }
+
+.wrap { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding-bottom: 3rem; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.anim { opacity: 0; animation: fadeUp 0.55s cubic-bezier(0.16,1,0.3,1) forwards; }
+.d1 { animation-delay: 0.05s; }
+.d2 { animation-delay: 0.13s; }
+.d3 { animation-delay: 0.21s; }
+.d4 { animation-delay: 0.29s; }
+
+/* HERO */
+.hero { padding: 2.8rem 1.4rem 2rem; }
+.hero-eyebrow { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse 2.2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+.eyebrow-text {
+  font-size: 11px; font-weight: 600; color: var(--green);
+  letter-spacing: 0.14em; text-transform: uppercase;
+}
+.hero-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 40px; font-weight: 800;
+  line-height: 1.0; letter-spacing: -1.5px;
+  margin-bottom: 10px;
+  background: linear-gradient(130deg, var(--text) 50%, var(--gold-l));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-sub { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.hero-sub strong { color: var(--gold-l); font-weight: 600; -webkit-text-fill-color: var(--gold-l); }
+
+/* STATS */
+.stats-strip {
+  margin: 0 1.4rem;
+  background: var(--s1);
+  border: 1px solid var(--border-md);
+  border-radius: var(--r);
+  display: grid; grid-template-columns: repeat(3,1fr);
+  overflow: hidden;
+}
+.stat-item { padding: 16px 14px; position: relative; }
+.stat-item+.stat-item::before {
+  content:''; position:absolute; left:0; top:18%; height:64%;
+  width:1px; background: var(--border-md);
+}
+.stat-lbl { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px; }
+.stat-val { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+.stat-val.accent { color: var(--gold-l); }
+
+/* PROGRESS */
+.prog-section {
+  margin: 1.1rem 1.4rem 0;
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 18px 20px;
+}
+.prog-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+.prog-label { font-size: 12px; color: var(--muted); font-weight: 500; }
+.prog-pct { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: var(--gold-l); }
+.bar-track { height: 5px; border-radius: 99px; background: var(--s3); overflow: hidden; }
+.bar-fill {
+  height: 100%; border-radius: 99px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-l));
+  transition: width 1.2s cubic-bezier(0.16,1,0.3,1);
+}
+.prog-detail { display: flex; justify-content: space-between; margin-top: 10px; }
+.prog-detail span { font-size: 11px; color: var(--faint); }
+.prog-detail strong { color: var(--muted); font-weight: 500; }
+
+/* SECTION HEAD */
+.section-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.6rem 1.4rem 0.75rem;
+}
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+}
+.section-badge {
+  font-size: 11px; font-weight: 600; color: var(--gold);
+  background: var(--gold-bg);
+  border: 1px solid rgba(201,168,76,0.18);
+  padding: 3px 11px; border-radius: 99px;
+}
+
+/* CARDS */
+.members { display: flex; flex-direction: column; gap: 8px; padding: 0 1.4rem; }
+
+.card {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px 18px;
+  position: relative; overflow: hidden;
+}
+.card::before {
+  content:''; position:absolute; left:0; top:0; bottom:0;
+  width:3px; border-radius:3px 0 0 3px;
+}
+.card.all::before   { background: var(--green); }
+.card.good::before  { background: var(--gold); }
+.card.late::before  { background: var(--amber); }
+.card.miss::before  { background: var(--s3); }
+
+.card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 13px; }
+.member-left { display: flex; align-items: center; gap: 11px; }
+
+.avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+  flex-shrink: 0;
+}
+.av-all  { background: var(--green-bg); color: var(--green); border: 1px solid rgba(62,207,142,0.2); }
+.av-good { background: var(--gold-bg);  color: var(--gold-l); border: 1px solid rgba(201,168,76,0.2); }
+.av-late { background: var(--amber-bg); color: var(--amber);  border: 1px solid rgba(245,166,35,0.2); }
+.av-miss { background: var(--s3);       color: var(--faint);  border: 1px solid var(--border); }
+
+.member-name { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: -0.2px; }
+.member-sub  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.amount-pill { font-size: 12px; font-weight: 600; padding: 5px 11px; border-radius: 99px; white-space: nowrap; }
+.pill-all  { background: var(--green-bg); color: var(--green); }
+.pill-good { background: var(--gold-bg);  color: var(--gold-l); }
+.pill-late { background: var(--amber-bg); color: var(--amber); }
+.pill-miss { background: var(--s3); color: var(--faint); }
+
+/* DOTS */
+.months { display: flex; gap: 5px; flex-wrap: wrap; }
+.dot {
+  height: 28px; min-width: 32px; padding: 0 6px;
+  border-radius: var(--r-xs);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.dot-paid    { background: var(--green-bg); color: var(--green); }
+.dot-current { background: var(--amber-bg); color: var(--amber); }
+.dot-future  { background: var(--s3); color: var(--faint); }
+
+/* MINI BAR */
+.mini-bar-wrap { margin-top: 10px; }
+.mini-bar-track { height: 2px; border-radius: 99px; background: var(--s3); overflow: hidden; }
+.mini-bar-fill  { height: 100%; border-radius: 99px; }
+.fill-all  { background: var(--green); }
+.fill-good { background: var(--gold); }
+.fill-late { background: var(--amber); }
+.fill-miss { background: var(--s3); }
+
+/* LEGEND */
+.legend { display: flex; gap: 14px; flex-wrap: wrap; padding: 1.3rem 1.4rem 0; }
+.leg { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
+.leg-dot { width: 8px; height: 8px; border-radius: 2px; }
+
+/* FOOTER */
+.footer {
+  margin: 1.6rem 1.4rem 0;
+  padding: 13px 18px;
+  background: var(--s1); border: 1px solid var(--border); border-radius: var(--r);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-left { font-size: 11px; color: var(--faint); }
+.footer-left strong { color: var(--muted); font-weight: 500; }
+.footer-logo { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 800; color: var(--gold); opacity: 0.5; letter-spacing: 0.14em; }
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="wrap"><div id="app"></div></div>
+
+<script>
+/* =====================================================
+   ✏️  CONFIG — MODIFIER ICI CHAQUE MOIS
+   =====================================================
+   Pour chaque membre : TRUE = payé, FALSE = pas payé
+   Mois : Jan Fév Mar Avr Mai Jun Août  (7 mois)
+
+   moisCourant → index du mois actuel
+     0=Jan 1=Fév 2=Mar 3=Avr 4=Mai 5=Jun 6=Août
+
+   lastUpdate → date de la dernière mise à jour
+   ===================================================== */
+
+const CONFIG = {
+  montant: 15,
+  moisNoms: ["Jan","Fév","Mar","Avr","Mai","Jun","Août"],
+  moisCourant: 3,
+  lastUpdate: "2 mai 2025",
+
+  membres: [
+    {
+      nom: "Ado",
+      cotisations: [true, true, true, true, false, false, false]
+    //               Jan   Fév   Mar   Avr   Mai   Jun   Août
+    },
+    {
+      nom: "Pionz",
+      cotisations: [true, true, true, false, false, false, false]
+    },
+    {
+      nom: "Ced",
+      cotisations: [true, true, true, false, false, false, false]
+    },
+    {
+      nom: "Stone",
+      cotisations: [true, true, false, false, false, false, false]
+    },
+    {
+      nom: "Sam",
+      cotisations: [true, true, true, true, false, false, false]
+    },
+    {
+      nom: "Diplo",
+      cotisations: [true, false, false, false, false, false, false]
+    },
+    {
+      nom: "Zyggy",
+      cotisations: [true, true, false, false, false, false, false]
+    }
+  ]
+};
+
+/* ===================================================
+   ⛔ NE PAS MODIFIER EN DESSOUS DE CETTE LIGNE
+   =================================================== */
+
+function initials(n) { return n.slice(0,2).toUpperCase(); }
+
+function render() {
+  const { montant, moisNoms, moisCourant, membres, lastUpdate } = CONFIG;
+  const totalMois = moisNoms.length;
+  const maxParMembre = totalMois * montant;
+  const totalMax = membres.length * maxParMembre;
+  const totalCollecte = membres.reduce((s,m) => s + m.cotisations.filter(Boolean).length * montant, 0);
+  const totalAttendu = membres.length * (moisCourant + 1) * montant;
+  const pct = Math.round(totalCollecte / totalMax * 100);
+  const pctAttendu = Math.round(Math.min(totalCollecte / totalAttendu * 100, 100));
+  const nbAJour = membres.filter(m => m.cotisations.slice(0, moisCourant+1).every(Boolean)).length;
+
+  const sorted = [...membres].sort((a,b) => b.cotisations.filter(Boolean).length - a.cotisations.filter(Boolean).length);
+
+  const cardsHtml = sorted.map((m, i) => {
+    const paid = m.cotisations.filter(Boolean).length;
+    const upToDate = m.cotisations.slice(0, moisCourant+1).every(Boolean);
+    const euros = paid * montant;
+    const pctM = Math.round(paid / totalMois * 100);
+    const retard = (moisCourant + 1) - paid;
+
+    let status, avCls, pillCls, fillCls;
+    if (upToDate) { status='all'; avCls='av-all'; pillCls='pill-all'; fillCls='fill-all'; }
+    else if (paid > moisCourant) { status='good'; avCls='av-good'; pillCls='pill-good'; fillCls='fill-good'; }
+    else if (paid > 0) { status='late'; avCls='av-late'; pillCls='pill-late'; fillCls='fill-late'; }
+    else { status='miss'; avCls='av-miss'; pillCls='pill-miss'; fillCls='fill-miss'; }
+
+    const subText = upToDate ? 'À jour ✓' : retard > 0 ? `${retard} mois en retard` : 'Avance de cotisation';
+
+    const dots = m.cotisations.map((v,idx) => {
+      if (v) return `<div class="dot dot-paid">${moisNoms[idx]}</div>`;
+      if (idx === moisCourant) return `<div class="dot dot-current">${moisNoms[idx]}</div>`;
+      return `<div class="dot dot-future">${moisNoms[idx]}</div>`;
+    }).join('');
+
+    return `
+    <div class="card ${status} anim" style="animation-delay:${0.32 + i*0.07}s">
+      <div class="card-top">
+        <div class="member-left">
+          <div class="avatar ${avCls}">${initials(m.nom)}</div>
+          <div>
+            <div class="member-name">${m.nom}</div>
+            <div class="member-sub">${subText}</div>
+          </div>
+        </div>
+        <div class="amount-pill ${pillCls}">${euros} / ${maxParMembre} €</div>
+      </div>
+      <div class="months">${dots}</div>
+      <div class="mini-bar-wrap">
+        <div class="mini-bar-track"><div class="mini-bar-fill ${fillCls}" style="width:${pctM}%"></div></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('app').innerHTML = `
+    <div class="hero anim d1">
+      <div class="hero-eyebrow"><div class="live-dot"></div><span class="eyebrow-text">Suivi en direct</span></div>
+      <div class="hero-title">Tontine<br>2025</div>
+      <div class="hero-sub"><strong>${montant} €</strong> / mois &nbsp;·&nbsp; Janvier → Août &nbsp;·&nbsp; <strong>${membres.length}</strong> membres</div>
+    </div>
+
+    <div class="stats-strip anim d2">
+      <div class="stat-item"><div class="stat-lbl">Collecté</div><div class="stat-val accent">${totalCollecte} €</div></div>
+      <div class="stat-item"><div class="stat-lbl">Objectif</div><div class="stat-val">${totalMax} €</div></div>
+      <div class="stat-item"><div class="stat-lbl">À jour</div><div class="stat-val">${nbAJour} / ${membres.length}</div></div>
+    </div>
+
+    <div class="prog-section anim d3">
+      <div class="prog-row"><span class="prog-label">Progression globale</span><span class="prog-pct">${pct}%</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+      <div class="prog-detail">
+        <span>Attendu à ce stade : <strong>${totalAttendu} €</strong></span>
+        <span>Taux de collecte : <strong>${pctAttendu}%</strong></span>
+      </div>
+    </div>
+
+    <div class="section-head anim d4">
+      <span class="section-title">Membres</span>
+      <span class="section-badge">${moisNoms[moisCourant]} en cours</span>
+    </div>
+
+    <div class="members">${cardsHtml}</div>
+
+    <div class="legend anim" style="animation-delay:0.88s">
+      <div class="leg"><div class="leg-dot" style="background:var(--green)"></div>À jour</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--gold)"></div>En avance</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--amber)"></div>En retard</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--s3);border:1px solid var(--border-md)"></div>Non payé</div>
+    </div>
+
+    <div class="footer anim" style="animation-delay:0.95s">
+      <div class="footer-left">Mis à jour le <strong>${lastUpdate}</strong></div>
+      <div class="footer-logo">TONTINE</div>
+    </div>
+  `;
+}
+
+render();
+</script>
+</body>
+</html>
