@@ -236,17 +236,17 @@ body {
    ✏️  CONFIG — MODIFIER ICI CHAQUE MOIS
    =====================================================
    Pour chaque membre : TRUE = payé, FALSE = pas payé
-   Mois : Jan Fév Mar Avr Mai Jun Août  (7 mois)
+   Mois : Jan Fév Mar Avr Mai Jun Juillet  (7 mois)
 
    moisCourant → index du mois actuel
-     0=Jan 1=Fév 2=Mar 3=Avr 4=Mai 5=Jun 6=Août
+     0=Jan 1=Fév 2=Mar 3=Avr 4=Mai 5=Jun 6=Juillet
 
    lastUpdate → date de la dernière mise à jour
    ===================================================== */
 
 const CONFIG = {
   montant: 15,
-  moisNoms: ["Jan","Fév","Mar","Avr","Mai","Jun","Août"],
+  moisNoms: ["Jan","Fév","Mar","Avr","Mai","Jun","Juillet"],
   moisCourant: 3,
   lastUpdate: "2 mai 2025",
 
@@ -254,11 +254,11 @@ const CONFIG = {
     {
       nom: "Ado",
       cotisations: [true, true, true, false, false, false, false]
-    //               Jan   Fév   Mar   Avr   Mai   Jun   Août
+    //               Jan   Fév   Mar   Avr   Mai   Jun   Juillet
     },
     {
       nom: "Pionz",
-      cotisations: [true, true, true, false, false, false, false]
+      cotisations: [true, true, true, true, false, false, false]
     },
     {
       nom: "Ced",
@@ -270,11 +270,7 @@ const CONFIG = {
     },
     {
       nom: "Sam",
-      cotisations: [false, false, false, false, false, false, false]
-    },
-    {
-      nom: "Diplo",
-      cotisations: [false, false, false, false, false, false, false]
+      cotisations: [true, true , true, true, false, false, false]
     },
     {
       nom: "Zyggy",
@@ -346,7 +342,7 @@ function render() {
     <div class="hero anim d1">
       <div class="hero-eyebrow"><div class="live-dot"></div><span class="eyebrow-text">Suivi en direct</span></div>
       <div class="hero-title">Cotisez svp &#x1F602;<br></div>
-      <div class="hero-sub"><strong>${montant} €</strong> / mois &nbsp;·&nbsp; Janvier → Août &nbsp;·&nbsp; <strong>${membres.length}</strong> membres</div>
+      <div class="hero-sub"><strong>${montant} €</strong> / mois &nbsp;·&nbsp; Janvier → Juillet &nbsp;·&nbsp; <strong>${membres.length}</strong> membres</div>
     </div>
 
     <div class="stats-strip anim d2">
